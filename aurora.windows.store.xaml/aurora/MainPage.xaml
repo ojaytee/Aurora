@@ -1,0 +1,39 @@
+﻿<Page
+    x:Class="aurora.MainPage"
+    IsTabStop="false"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:aurora"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="Last 20 posts" Style="{StaticResource HeaderTextStyle}" Margin="20" />
+        <ListView ItemsSource="{Binding}" Grid.Row="1" Margin="20">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0,0,0,12">
+                        <TextBlock Text="{Binding title}" Foreground="Black" Style="{StaticResource TitleTextStyle}" />
+                        <TextBlock Text="{Binding creationDate}" Foreground="Black" Style="{StaticResource SubheaderTextStyle}" />
+                        <TextBlock Text="answerCount" Foreground="Black" />
+                        <TextBlock Text="{Binding answerCount}" Foreground="Black" />
+                        <TextBlock Text="commentCount" Foreground="Black" />
+                        <TextBlock Text="{Binding commentCount}" Foreground="Black" />
+                        <TextBlock Text="favoriteCount" Foreground="Black" />
+                        <TextBlock Text="{Binding favoriteCount}" Foreground="Black" />
+                        <TextBlock Text="viewCount" Foreground="Black" />
+                        <TextBlock Text="{Binding viewCount}" Foreground="Black" />
+                        <TextBlock Text="score" Foreground="Black" />
+                        <TextBlock Text="{Binding score}" Foreground="Black" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ProgressRing IsActive="True" x:Name="ProgressRing" />
+    </Grid>
+</Page>
