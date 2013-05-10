@@ -1,6 +1,7 @@
 ﻿namespace aurora
 {
     using Windows.UI.Text;
+    using Windows.UI.Xaml;
 
     public class vTagCloud
     {
@@ -30,6 +31,10 @@
         public double NormalizedPosts { get; set; }
 
         public int Posts { get; set; }
+
+        public Thickness Margin { get; set; }
+
+        public VerticalAlignment VerticalAlignment { get; set; }
 
         #endregion
     }

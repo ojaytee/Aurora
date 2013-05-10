@@ -9,7 +9,9 @@
 
     using Windows.UI.Popups;
     using Windows.UI.Text;
+    using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Input;
     using Windows.UI.Xaml.Navigation;
 
     public sealed partial class MainPage : Page
@@ -68,6 +70,16 @@
                     {
                         vm.FontWeight = FontWeights.Light;
                     }
+                    double leftMargin = 10.0 + random.Next(50);
+                    vm.Margin = new Thickness(leftMargin, 0, 10, 0);
+
+                    int alignment = random.Next(3);
+                    if (alignment == 0)
+                        vm.VerticalAlignment = VerticalAlignment.Top;
+                    else if (alignment == 1)
+                        vm.VerticalAlignment = VerticalAlignment.Center;
+                    else
+                        vm.VerticalAlignment = VerticalAlignment.Bottom;
 
                     tags.Add(vm);
                 }
@@ -87,5 +99,16 @@
         }
 
         #endregion
+
+        private void TagTapped(object sender, TappedRoutedEventArgs e)
+        {
+            TextBlock button = sender as TextBlock;
+            if (button == null) return;
+            TagViewModel vm = button.Tag as TagViewModel;
+            if (vm == null) return;
+
+            MessageDialog dialog = new MessageDialog(vm.Name);
+            dialog.ShowAsync();
+        }
     }
 }

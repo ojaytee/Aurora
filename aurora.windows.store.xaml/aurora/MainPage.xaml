@@ -10,6 +10,11 @@
     
     <Grid Background="White">
         <ItemsControl ItemsSource="{Binding}" Margin="100">
+            <ItemsControl.ItemContainerTransitions>
+                <TransitionCollection>
+                    <EntranceThemeTransition />
+                </TransitionCollection>
+            </ItemsControl.ItemContainerTransitions>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <local:WrapPanel Orientation="Horizontal" />
@@ -17,10 +22,10 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}" FontSize="{Binding FontSize}" FontWeight="{Binding FontWeight}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,10,0" />
+                    <TextBlock Tag="{Binding}" IsTapEnabled="True" Tapped="TagTapped" Text="{Binding Name}" FontSize="{Binding FontSize}" FontWeight="{Binding FontWeight}" VerticalAlignment="{Binding VerticalAlignment}" HorizontalAlignment="Center" Margin="{Binding Margin}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <ProgressRing IsActive="True" x:Name="ProgressRing" />
+        <ProgressRing IsActive="True" x:Name="ProgressRing" Width="50" Height="50" />
     </Grid>
 </Page>
