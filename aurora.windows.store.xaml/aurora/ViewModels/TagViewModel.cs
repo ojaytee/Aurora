@@ -26,7 +26,9 @@
 
         public int PostCount { get; set; }
 
-        public post[] Posts { get; set; }
+        public post[] MostViewedPosts { get; set; }
+
+        public post[] NewPosts { get; set; }
 
         public string Title { get; set; }
 
@@ -72,67 +74,83 @@
             }
         }
 
+        private string PostToString(post post)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append("- ");
+            builder.AppendLine(post.title);
+
+            builder.Append("  ");
+            if (post.score.HasValue && post.score.Value > 0)
+            {
+                builder.Append(post.score.Value.ToString("#,###,###"));
+                builder.Append(" | ");
+            }
+            else
+            {
+                builder.Append("no score | ");
+            }
+
+            if (post.viewCount.HasValue && post.viewCount.Value > 0)
+            {
+                builder.Append(post.viewCount.Value.ToString("#,###,###"));
+                builder.Append(" views | ");
+            }
+            else
+            {
+                builder.Append("no views | ");
+            }
+
+            if (post.answerCount.HasValue && post.answerCount.Value > 0)
+            {
+                builder.Append(post.answerCount.Value.ToString("#,###,###"));
+                builder.Append(" answers | ");
+            }
+            else
+            {
+                builder.Append("no answers | ");
+            }
+
+            if (post.commentCount.HasValue && post.commentCount.Value > 0)
+            {
+                builder.Append(post.commentCount.Value.ToString("#,###,###"));
+                builder.Append(" comments | ");
+            }
+            else
+            {
+                builder.Append("no comments | ");
+            }
+
+            if (post.favoriteCount.HasValue && post.favoriteCount.Value > 0)
+            {
+                builder.Append(post.favoriteCount.Value.ToString("#,###,###"));
+                builder.AppendLine(" favorites");
+            }
+            else
+            {
+                builder.AppendLine("no favortites");
+            }
+
+            return builder.ToString();
+        }
+
         public override string ToString()
         {
             var builder = new StringBuilder();
             builder.AppendLine(this.PostCount.ToString("#,###,###") + " posts");
             builder.AppendLine();
-            builder.AppendLine("POSTS");
-            foreach (var post in this.Posts)
+            builder.AppendLine("MOST VIEWED POSTS");
+            foreach (var post in this.MostViewedPosts)
             {
-                builder.Append("- ");
-                builder.AppendLine(post.title);
+                builder.Append(this.PostToString(post));
+            }
 
-                builder.Append("  ");
-                if (post.score.HasValue)
-                {
-                    builder.Append(post.score.Value.ToString("#,###,###"));
-                    builder.Append(" | ");
-                }
-                else
-                {
-                    builder.Append("no score | ");
-                }
-
-                if (post.viewCount.HasValue)
-                {
-                    builder.Append(post.viewCount.Value.ToString("#,###,###"));
-                    builder.Append(" views | ");
-                }
-                else
-                {
-                    builder.Append("no views | ");
-                }
-
-                if (post.answerCount.HasValue)
-                {
-                    builder.Append(post.answerCount.Value.ToString("#,###,###"));
-                    builder.Append(" answers | ");
-                }
-                else
-                {
-                    builder.Append("no answers | ");
-                }
-
-                if (post.commentCount.HasValue)
-                {
-                    builder.Append(post.commentCount.Value.ToString("#,###,###"));
-                    builder.Append(" comments | ");
-                }
-                else
-                {
-                    builder.Append("no comments | ");
-                }
-
-                if (post.favoriteCount.HasValue)
-                {
-                    builder.Append(post.favoriteCount.Value.ToString("#,###,###"));
-                    builder.AppendLine(" favorites");
-                }
-                else
-                {
-                    builder.AppendLine("no favortites");
-                }
+            builder.AppendLine();
+            builder.AppendLine("NEW POSTS");
+            foreach (var post in this.NewPosts)
+            {
+                builder.Append(this.PostToString(post));
             }
 
             return builder.ToString();

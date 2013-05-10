@@ -49,7 +49,8 @@
                                         Id = _.id, 
                                         Title = _.title, 
                                         PostCount = _.postCount, 
-                                        Posts = _.posts
+                                        MostViewedPosts = _.mostViewedPosts,
+                                        NewPosts = _.newPosts,
                                     }).ToList();
 
                 double maxPosts = tags.Max(_ => _.PostCount);

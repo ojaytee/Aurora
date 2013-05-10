@@ -8,7 +8,9 @@
 
         public int postCount { get; set; }
 
-        public post[] posts { get; set; }
+        public post[] mostViewedPosts { get; set; }
+
+        public post[] newPosts { get; set; }
 
         public int tagId { get; set; }
 
