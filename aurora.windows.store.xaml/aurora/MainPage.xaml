@@ -22,10 +22,14 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Tag="{Binding}" IsTapEnabled="True" Tapped="TagTapped" Text="{Binding Name}" FontSize="{Binding FontSize}" FontWeight="{Binding FontWeight}" VerticalAlignment="{Binding VerticalAlignment}" HorizontalAlignment="Center" Margin="{Binding Margin}" />
+                    <TextBlock Tag="{Binding}" IsTapEnabled="True" Tapped="OnTagTapped" Text="{Binding Title}" FontSize="{Binding FontSize}" FontWeight="{Binding FontWeight}" VerticalAlignment="{Binding VerticalAlignment}" HorizontalAlignment="Center" Margin="{Binding Margin}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <ProgressRing IsActive="True" x:Name="ProgressRing" Width="50" Height="50" />
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="ProgressView">
+            <ProgressRing IsActive="True" Width="50" Height="50" Foreground="Black" HorizontalAlignment="Center" />
+            <TextBlock Text="waiting for the magic to begin..." Style="{StaticResource PageSubheaderTextStyle}" Foreground="Black" Margin="0,50,0,0" />
+        </StackPanel>
+        
     </Grid>
 </Page>

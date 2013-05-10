@@ -1,24 +1,24 @@
 ﻿namespace aurora
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using aurora.Models;
 
     using Microsoft.WindowsAzure.MobileServices;
 
     using Windows.UI.Popups;
-    using Windows.UI.Text;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
     using Windows.UI.Xaml.Navigation;
 
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage
     {
-        #region Fields
+        #region Static Fields
 
-        private readonly IMobileServiceTable<vTagCloud> vTagCloudTable = App.MobileService.GetTable<vTagCloud>();
+        private static readonly Random random = new Random();
 
         #endregion
 
@@ -40,75 +40,54 @@
 
         private async Task LoadAsync()
         {
-            var tags = new List<TagViewModel>();
-
             try
             {
-                var tagCloud = await this.vTagCloudTable.ToCollectionAsync();
-                double maxPosts = tagCloud.Max(_ => _.posts);
-                double minPosts = tagCloud.Min(_ => _.posts);
+                var tags = (from _ in await App.MobileService.GetTable<vTag>().ToCollectionAsync()
+                            select
+                                new TagViewModel
+                                    {
+                                        Id = _.id, 
+                                        Title = _.title, 
+                                        PostCount = _.postCount, 
+                                        Posts = _.posts
+                                    }).ToList();
 
-                var random = new Random();
+                double maxPosts = tags.Max(_ => _.PostCount);
+                double minPosts = tags.Min(_ => _.PostCount);
 
-                foreach (var vTag in tagCloud.OrderBy(_ => random.Next()))
+                foreach (var tag in tags)
                 {
-                    var vm = new TagViewModel();
-                    vm.Id = vTag.id;
-                    vm.Name = vTag.tagName;
-                    vm.Posts = vTag.posts;
-                    vm.NormalizedPosts = (vm.Posts - minPosts) / maxPosts;
-                    vm.FontSize = 18.0 + (54.0 * vm.NormalizedPosts);
-                    if (vm.NormalizedPosts > 0.75)
-                    {
-                        vm.FontWeight = FontWeights.Black;
-                    }
-                    else if (vm.NormalizedPosts > 0.50)
-                    {
-                        vm.FontWeight = FontWeights.Normal;
-                    }
-                    else
-                    {
-                        vm.FontWeight = FontWeights.Light;
-                    }
-                    double leftMargin = 10.0 + random.Next(50);
-                    vm.Margin = new Thickness(leftMargin, 0, 10, 0);
-
-                    int alignment = random.Next(3);
-                    if (alignment == 0)
-                        vm.VerticalAlignment = VerticalAlignment.Top;
-                    else if (alignment == 1)
-                        vm.VerticalAlignment = VerticalAlignment.Center;
-                    else
-                        vm.VerticalAlignment = VerticalAlignment.Bottom;
-
-                    tags.Add(vm);
+                    tag.Normalize(minPosts, maxPosts);
                 }
 
-                this.DataContext = tags;
+                this.DataContext = tags.OrderBy(_ => random.Next());
             }
             catch (MobileServiceInvalidOperationException e)
             {
-                var dialog = new MessageDialog(e.Message);
-                dialog.Title = "ERROR";
+                var dialog = new MessageDialog(e.Message) { Title = "ERROR" };
                 dialog.ShowAsync();
             }
             finally
             {
-                this.ProgressRing.IsActive = false;
+                this.ProgressView.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void OnTagTapped(object sender, TappedRoutedEventArgs e)
+        {
+            var senderAsTextBlock = sender as TextBlock;
+            if (senderAsTextBlock != null)
+            {
+                var tagViewModel = senderAsTextBlock.Tag as TagViewModel;
+                if (tagViewModel != null)
+                {
+                    string title = tagViewModel.Title + " [#" + tagViewModel.Id + "]";
+                    var dialog = new MessageDialog(tagViewModel.ToString()) { Title = title };
+                    dialog.ShowAsync();
+                }
             }
         }
 
         #endregion
-
-        private void TagTapped(object sender, TappedRoutedEventArgs e)
-        {
-            TextBlock button = sender as TextBlock;
-            if (button == null) return;
-            TagViewModel vm = button.Tag as TagViewModel;
-            if (vm == null) return;
-
-            MessageDialog dialog = new MessageDialog(vm.Name);
-            dialog.ShowAsync();
-        }
     }
 }

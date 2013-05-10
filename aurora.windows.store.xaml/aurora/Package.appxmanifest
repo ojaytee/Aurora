@@ -15,8 +15,8 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="aurora.App">
-      <VisualElements DisplayName="project aurora" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="project aurora" ForegroundText="light" BackgroundColor="#464646" ToastCapable="true">
-        <DefaultTile ShowName="allLogos" />
+      <VisualElements DisplayName="project aurora" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="project aurora" ForegroundText="dark" BackgroundColor="#FFFFFF" ToastCapable="true">
+        <DefaultTile ShowName="allLogos" ShortName="aurora" />
         <SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="white" />
         <InitialRotationPreference>
           <Rotation Preference="landscape" />
