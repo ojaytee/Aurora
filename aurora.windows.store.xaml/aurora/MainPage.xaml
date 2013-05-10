@@ -9,31 +9,18 @@
     mc:Ignorable="d">
     
     <Grid Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <TextBlock Text="Last 20 posts" Style="{StaticResource HeaderTextStyle}" Margin="20" />
-        <ListView ItemsSource="{Binding}" Grid.Row="1" Margin="20">
-            <ListView.ItemTemplate>
+        <ItemsControl ItemsSource="{Binding}" Margin="100">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <local:WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Margin="0,0,0,12">
-                        <TextBlock Text="{Binding title}" Foreground="Black" Style="{StaticResource TitleTextStyle}" />
-                        <TextBlock Text="{Binding creationDate}" Foreground="Black" Style="{StaticResource SubheaderTextStyle}" />
-                        <TextBlock Text="answerCount" Foreground="Black" />
-                        <TextBlock Text="{Binding answerCount}" Foreground="Black" />
-                        <TextBlock Text="commentCount" Foreground="Black" />
-                        <TextBlock Text="{Binding commentCount}" Foreground="Black" />
-                        <TextBlock Text="favoriteCount" Foreground="Black" />
-                        <TextBlock Text="{Binding favoriteCount}" Foreground="Black" />
-                        <TextBlock Text="viewCount" Foreground="Black" />
-                        <TextBlock Text="{Binding viewCount}" Foreground="Black" />
-                        <TextBlock Text="score" Foreground="Black" />
-                        <TextBlock Text="{Binding score}" Foreground="Black" />
-                    </StackPanel>
+                    <TextBlock Text="{Binding Name}" FontSize="{Binding FontSize}" FontWeight="{Binding FontWeight}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,10,0" />
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
         <ProgressRing IsActive="True" x:Name="ProgressRing" />
     </Grid>
 </Page>

@@ -1,10 +1,14 @@
 ﻿namespace aurora
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.WindowsAzure.MobileServices;
 
     using Windows.UI.Popups;
+    using Windows.UI.Text;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Navigation;
 
@@ -12,7 +16,7 @@
     {
         #region Fields
 
-        private readonly IMobileServiceTable<Posts> postsTable = App.MobileService.GetTable<Posts>();
+        private readonly IMobileServiceTable<vTagCloud> vTagCloudTable = App.MobileService.GetTable<vTagCloud>();
 
         #endregion
 
@@ -34,9 +38,41 @@
 
         private async Task LoadAsync()
         {
+            var tags = new List<TagViewModel>();
+
             try
             {
-                this.DataContext = await this.postsTable.OrderByDescending(_ => _.creationDate).ToCollectionAsync(20);
+                var tagCloud = await this.vTagCloudTable.ToCollectionAsync();
+                double maxPosts = tagCloud.Max(_ => _.posts);
+                double minPosts = tagCloud.Min(_ => _.posts);
+
+                var random = new Random();
+
+                foreach (var vTag in tagCloud.OrderBy(_ => random.Next()))
+                {
+                    var vm = new TagViewModel();
+                    vm.Id = vTag.id;
+                    vm.Name = vTag.tagName;
+                    vm.Posts = vTag.posts;
+                    vm.NormalizedPosts = (vm.Posts - minPosts) / maxPosts;
+                    vm.FontSize = 18.0 + (54.0 * vm.NormalizedPosts);
+                    if (vm.NormalizedPosts > 0.75)
+                    {
+                        vm.FontWeight = FontWeights.Black;
+                    }
+                    else if (vm.NormalizedPosts > 0.50)
+                    {
+                        vm.FontWeight = FontWeights.Normal;
+                    }
+                    else
+                    {
+                        vm.FontWeight = FontWeights.Light;
+                    }
+
+                    tags.Add(vm);
+                }
+
+                this.DataContext = tags;
             }
             catch (MobileServiceInvalidOperationException e)
             {
